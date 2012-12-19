@@ -6,6 +6,24 @@
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/main.css" rel="stylesheet">
         <script src="js/bootstrap.min.js"></script>
+        <?php
+        if (is_file('settings.php'))
+        {
+          include 'settings.php';
+        }
+
+        require 'lib/AmazonECS.class.php';
+
+        try
+        {
+          $amazonEcs = new AmazonECS(AWS_API_KEY, AWS_API_SECRET_KEY, 'COM', AWS_ASSOCIATE_TAG);
+          $amazonEcs->setReturnType(AmazonECS::RETURN_TYPE_ARRAY);
+        }
+        catch(Exception $e)
+        {
+          echo $e->getMessage();
+        }
+        ?>
     </head>
     <body>
         <div class="navbar navbar-fixed-top navbar-inverse">
@@ -20,10 +38,57 @@
         </div>
         <div id="wrap">
             <div id="main" class="container">
-                <h3>Welcome!</h3>
-                <p class="lead">
-                    
-                </p>
+                <h2>Which gift do you prefer?</h2>
+                <div class="row">
+                  <div class="select-gift span5">
+                    <?php
+                    $response = $amazonEcs->responseGroup('Small,Images')->lookup('1616550414');
+
+                    if (isset($response['Items']['Item']) ) {
+                      $item1 = $response['Items']['Item'];
+
+                      if (isset($item1['ASIN'])) {
+                        if (isset($item1['DetailPageURL'])) {
+                          if (isset($item1['ItemAttributes']['Title'])) {
+                            echo "<div class='lead'><a href='" . $item1['DetailPageURL'] . "' target='_blank'>" . $item1['ItemAttributes']['Title'] . "</a></div>";
+                          }
+
+                          if (isset($item1['LargeImage']['URL'] )) {
+                            echo "<img src='" . $item1['LargeImage']['URL'] . "'>";
+                          }
+                        }
+                      }
+                    }
+                    ?>
+                    <div class="select-btn">
+                      <a class="btn btn-primary btn-large">This one!</a>
+                    </div>
+                  </div>
+                  <div class="select-gift span5">
+                    <?php
+                    $response = $amazonEcs->responseGroup('Small,Images')->lookup('0395177111');
+
+                    if (isset($response['Items']['Item']) ) {
+                      $item1 = $response['Items']['Item'];
+
+                      if (isset($item1['ASIN'])) {
+                        if (isset($item1['DetailPageURL'])) {
+                          if (isset($item1['ItemAttributes']['Title'])) {
+                            echo "<div class='lead'><a href='" . $item1['DetailPageURL'] . "' target='_blank'>" . $item1['ItemAttributes']['Title'] . "</a></div>";
+                          }
+
+                          if (isset($item1['LargeImage']['URL'] )) {
+                            echo "<img src='" . $item1['LargeImage']['URL'] . "'>";
+                          }
+                        }
+                      }
+                    }
+                    ?>
+                    <div class="select-btn">
+                      <a class="btn btn-primary btn-large">This one!</a>
+                    </div>
+                  </div>
+                </div>
             </div>
             <div id="push"></div>
         </div>
