@@ -5,6 +5,7 @@
         <title>RankGifts</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/main.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <?php
         if (is_file('settings.php'))
