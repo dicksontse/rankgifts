@@ -16,9 +16,9 @@
         $link = mysql_connect(DB_SERVER, DB_USER, DB_PW) or die('Could not connect: ' . mysql_error());
         mysql_select_db('rankgifts') or die('Could not select database');
 
-        if ($_POST['ASIN'])
+        if ($_POST['update-ASIN'])
         {
-          $query = "UPDATE products SET points = points + 1 WHERE ASIN = '" . $_POST['ASIN'] . "'";
+          $query = "UPDATE products SET points = points + 1 WHERE ASIN = '" . $_POST['update-ASIN'] . "'";
           $result = mysql_query($query) or die('Query failed: ' . mysql_error());
         }
 
@@ -29,7 +29,6 @@
         $gift2 = mysql_fetch_array($result);
 
         mysql_free_result($result);
-        mysql_close($link);
 
         require 'lib/AmazonECS.class.php';
 
@@ -42,6 +41,33 @@
         {
           echo $e->getMessage();
         }
+
+        if ($_POST['add-ASIN'])
+        {
+          $response = $amazonEcs->lookup($_POST['add-ASIN']);
+          if (isset($response['Items']['Request']['Errors']))
+          {
+            $invalid = true;
+          }
+          else {
+            $query = "SELECT * FROM products WHERE ASIN = '" . $_POST['add-ASIN'] . "'";
+            $result = mysql_query($query) or die('Query failed: ' . mysql_error());
+            $checkGift = mysql_fetch_array($result);
+            if ($checkGift)
+            {
+              // ASIN already in db
+            }
+            else
+            {
+              $query = "INSERT INTO products (ASIN) VALUES ('" . $_POST['add-ASIN'] . "')";
+              $result = mysql_query($query) or die('Query failed: ' . mysql_error());
+              $added = true;
+            }
+          }
+        }
+
+        mysql_close($link);
+
         ?>
     </head>
     <body>
@@ -52,11 +78,29 @@
                     <ul class="nav">
                         <li><a href="#">Top 100</a></li>
                     </ul>
+                    <form class="navbar-form pull-right" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                      <input type="text" class="span2" name="add-ASIN" maxlength="10" placeholder="Enter ASIN">
+                      <button type="submit" class="btn">Add</button>
+                    </form>
                 </div>
             </div>
         </div>
         <div id="wrap">
             <div id="main" class="container">
+                <?php
+                if ($checkGift)
+                {
+                  echo '<div class="alert alert-info"><button data-dismiss="alert" class="close" type="button">×</button><strong>Already exists:</strong> Please try adding another gift!</div>';
+                }
+                else if ($invalid)
+                {
+                  echo '<div class="alert alert-error"><button data-dismiss="alert" class="close" type="button">×</button><strong>Invalid ASIN:</strong> Please try again. :(</div>';
+                }
+                else if ($added)
+                {
+                  echo '<div class="alert alert-success"><button data-dismiss="alert" class="close" type="button">×</button><strong>Success!</strong> Thank you for adding a gift! :)</div>';
+                }
+                ?>
                 <h2>Which gift do you prefer?</h2>
                 <div class="row">
                   <div class="select-gift span5">
@@ -81,7 +125,7 @@
                     ?>
                     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                       <div class="select-btn">
-                        <input type="hidden" name="ASIN" value="<?php echo $gift1['ASIN']; ?>" />
+                        <input type="hidden" name="update-ASIN" value="<?php echo $gift1['ASIN']; ?>" />
                         <button type="submit" class="btn btn-primary btn-large">This one!</button>
                       </div>
                     </form>
@@ -108,7 +152,7 @@
                     ?>
                     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                       <div class="select-btn">
-                        <input type="hidden" name="ASIN" value="<?php echo $gift2['ASIN']; ?>" />
+                        <input type="hidden" name="update-ASIN" value="<?php echo $gift2['ASIN']; ?>" />
                         <button type="submit" class="btn btn-primary btn-large">This one!</button>
                       </div>
                     </form>
