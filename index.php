@@ -13,6 +13,18 @@
           include 'settings.php';
         }
 
+        $link = mysql_connect(DB_SERVER, DB_USER, DB_PW) or die('Could not connect: ' . mysql_error());
+        mysql_select_db('rankgifts') or die('Could not select database');
+
+        $query = 'SELECT * FROM products ORDER BY RAND() LIMIT 2';
+        $result = mysql_query($query) or die('Query failed: ' . mysql_error());
+
+        $gift1 = mysql_fetch_array($result);
+        $gift2 = mysql_fetch_array($result);
+
+        mysql_free_result($result);
+        mysql_close($link);
+
         require 'lib/AmazonECS.class.php';
 
         try
@@ -43,7 +55,7 @@
                 <div class="row">
                   <div class="select-gift span5">
                     <?php
-                    $response = $amazonEcs->responseGroup('Small,Images')->lookup('1616550414');
+                    $response = $amazonEcs->responseGroup('Small,Images')->lookup($gift1['ASIN']);
 
                     if (isset($response['Items']['Item']) ) {
                       $item1 = $response['Items']['Item'];
@@ -55,7 +67,7 @@
                           }
 
                           if (isset($item1['LargeImage']['URL'] )) {
-                            echo "<img src='" . $item1['LargeImage']['URL'] . "'>";
+                            echo "<a href='" . $item1['DetailPageURL'] . "' target='_blank'><img src='" . $item1['LargeImage']['URL'] . "'></a>";
                           }
                         }
                       }
@@ -67,7 +79,7 @@
                   </div>
                   <div class="select-gift span5">
                     <?php
-                    $response = $amazonEcs->responseGroup('Small,Images')->lookup('0395177111');
+                    $response = $amazonEcs->responseGroup('Small,Images')->lookup($gift2['ASIN']);
 
                     if (isset($response['Items']['Item']) ) {
                       $item1 = $response['Items']['Item'];
@@ -79,7 +91,7 @@
                           }
 
                           if (isset($item1['LargeImage']['URL'] )) {
-                            echo "<img src='" . $item1['LargeImage']['URL'] . "'>";
+                            echo "<a href='" . $item1['DetailPageURL'] . "' target='_blank'><img src='" . $item1['LargeImage']['URL'] . "'></a>";
                           }
                         }
                       }
