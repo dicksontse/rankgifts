@@ -16,6 +16,12 @@
         $link = mysql_connect(DB_SERVER, DB_USER, DB_PW) or die('Could not connect: ' . mysql_error());
         mysql_select_db('rankgifts') or die('Could not select database');
 
+        if ($_POST['ASIN'])
+        {
+          $query = "UPDATE products SET points = points + 1 WHERE ASIN = '" . $_POST['ASIN'] . "'";
+          $result = mysql_query($query) or die('Query failed: ' . mysql_error());
+        }
+
         $query = 'SELECT * FROM products ORDER BY RAND() LIMIT 2';
         $result = mysql_query($query) or die('Query failed: ' . mysql_error());
 
@@ -73,9 +79,12 @@
                       }
                     }
                     ?>
-                    <div class="select-btn">
-                      <a class="btn btn-primary btn-large">This one!</a>
-                    </div>
+                    <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                      <div class="select-btn">
+                        <input type="hidden" name="ASIN" value="<?php echo $gift1['ASIN']; ?>" />
+                        <button type="submit" class="btn btn-primary btn-large">This one!</button>
+                      </div>
+                    </form>
                   </div>
                   <div class="select-gift span5">
                     <?php
@@ -97,9 +106,12 @@
                       }
                     }
                     ?>
-                    <div class="select-btn">
-                      <a class="btn btn-primary btn-large">This one!</a>
-                    </div>
+                    <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                      <div class="select-btn">
+                        <input type="hidden" name="ASIN" value="<?php echo $gift2['ASIN']; ?>" />
+                        <button type="submit" class="btn btn-primary btn-large">This one!</button>
+                      </div>
+                    </form>
                   </div>
                 </div>
             </div>
