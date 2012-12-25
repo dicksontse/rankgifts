@@ -13,6 +13,14 @@
           include 'settings.php';
         }
 
+        function truncate_title($title, $limit) {
+          if (strlen($title) > $limit)
+          {
+            $title = substr($title, 0, $limit) . '...';
+          }
+          return $title;
+        }
+
         $link = mysql_connect(DB_SERVER, DB_USER, DB_PW) or die('Could not connect: ' . mysql_error());
         mysql_select_db('rankgifts') or die('Could not select database');
 
@@ -113,7 +121,7 @@
                       if (isset($item1['ASIN'])) {
                         if (isset($item1['DetailPageURL'])) {
                           if (isset($item1['ItemAttributes']['Title'])) {
-                            echo "<div class='lead'><a href='" . $item1['DetailPageURL'] . "' target='_blank'>" . $item1['ItemAttributes']['Title'] . "</a></div>";
+                            echo "<div class='lead'><a href='" . $item1['DetailPageURL'] . "' target='_blank'>" . truncate_title($item1['ItemAttributes']['Title'], 100) . "</a></div>";
                           }
 
                           if (isset($item1['LargeImage']['URL'] )) {
@@ -134,7 +142,7 @@
                       if (isset($item1['ASIN'])) {
                         if (isset($item1['DetailPageURL'])) {
                           if (isset($item1['ItemAttributes']['Title'])) {
-                            echo "<div class='lead'><a href='" . $item1['DetailPageURL'] . "' target='_blank'>" . $item1['ItemAttributes']['Title'] . "</a></div>";
+                            echo "<div class='lead'><a href='" . $item1['DetailPageURL'] . "' target='_blank'>" . truncate_title($item1['ItemAttributes']['Title'], 100) . "</a></div>";
                           }
 
                           if (isset($item1['LargeImage']['URL'] )) {
