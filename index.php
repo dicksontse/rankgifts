@@ -7,6 +7,11 @@
         <link href="css/main.css" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
+        <script>
+          $(document).ready(function () {
+            $("[rel=popover]").popover({'placement':'bottom', 'trigger':'focus'});
+          });
+        </script>
         <?php
         if (is_file('settings.php'))
         {
@@ -87,7 +92,7 @@
                         <li><a href="ranks.php">Top 10 Gifts</a></li>
                     </ul>
                     <form class="navbar-form pull-right" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                      <input type="text" class="span2" name="add-ASIN" maxlength="10" placeholder="Enter ASIN">
+                      <input type="text" class="span2" name="add-ASIN" maxlength="10" placeholder="Enter ASIN" rel="popover" title="Finding an ASIN" data-content="Go to a product on Amazon.com and look in the URL: www.amazon.com/dp/ASIN">
                       <button type="submit" class="btn">Add Gift</button>
                     </form>
                 </div>
@@ -102,7 +107,7 @@
                 }
                 else if ($invalid)
                 {
-                  echo '<div class="alert alert-error"><button data-dismiss="alert" class="close" type="button">×</button><strong>Invalid ASIN:</strong> Please try again. :(</div>';
+                  echo '<div class="alert alert-error"><button data-dismiss="alert" class="close" type="button">×</button><strong>Invalid ASIN:</strong> Please try again. :(<br><strong>Example:</strong> The 10-character ID after "/dp/" is the ASIN.<br>http://www.amazon.com/StarCraft-II-Heart-Collectors-PC-Mac/dp/<strong>B0050SZ1JW</strong>/</div>';
                 }
                 else if ($added)
                 {
