@@ -38,16 +38,19 @@
         {
           $amazonEcs = new AmazonECS(AWS_API_KEY, AWS_API_SECRET_KEY, 'COM', AWS_ASSOCIATE_TAG);
           $amazonEcs->setReturnType(AmazonECS::RETURN_TYPE_ARRAY);
-          $amazonEcs->requestDelay(true);
 
           for ($i = 0; $i < count($gifts); $i++)
           {
-            if ($gifts[i]['timestamp'])
+            if ($gifts[$i]['timestamp'])
             {
-              $timeDiff = time() - $gifts[i]['timestamp'];
+              $timeDiff = time() - $gifts[$i]['timestamp'];
               if ($timeDiff >= 3600) // Refresh product data if older than 1 hour
               {
                 $refreshGift = true;
+              }
+              else
+              {
+                $refreshGift = false;
               }
             }
             else
@@ -57,7 +60,7 @@
 
             if ($refreshGift)
             {
-              $response = $amazonEcs->responseGroup('Small,Images')->lookup($gifts[i]['ASIN']);
+              $response = $amazonEcs->lookup($gifts[$i]['ASIN']);
 
               if (isset($response['Items']['Item']) ) {
                 $item1 = $response['Items']['Item'];
@@ -65,17 +68,13 @@
                 if (isset($item1['ASIN'])) {
                   if (isset($item1['DetailPageURL'])) {
                     if (isset($item1['ItemAttributes']['Title'])) {
-                      $item1PageURL = $item1['DetailPageURL'];
-                      $item1Title = $item1['ItemAttributes']['Title'];
-                    }
-
-                    if (isset($item1['LargeImage']['URL'] )) {
-                      $item1ImageURL = $item1['LargeImage']['URL'];
+                      $gifts[$i]['Title'] = $item1['ItemAttributes']['Title'];
+                      $gifts[$i]['PageURL'] = $item1['DetailPageURL'];
                     }
                   }
                 }
 
-                $query = "UPDATE products SET Title = '" . str_replace("'", "\'", $item1Title) . "', PageURL = '" . str_replace("'", "\'", $item1PageURL) . "', ImageURL = '" . str_replace("'", "\'", $item1ImageURL) . "', timestamp = '" . time() . "' WHERE ASIN = '" . $gifts[i]['ASIN'] . "'";
+                $query = "UPDATE products SET Title = '" . str_replace("'", "\'", $item1Title) . "', PageURL = '" . str_replace("'", "\'", $item1PageURL) . "', ImageURL = '" . str_replace("'", "\'", $item1ImageURL) . "', timestamp = '" . time() . "' WHERE ASIN = '" . $gifts[$i]['ASIN'] . "'";
                 $result = mysql_query($query) or die('Query failed: ' . mysql_error());
               }
             }
