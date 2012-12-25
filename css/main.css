@@ -33,24 +33,52 @@ section {
     font-size: 12px;
 }
 
+.navbar-inner {
+    background-color: #2F96B4;
+    background-image: none;
+}
+
+.navbar .brand {
+    color: #FDFDFD;
+    font-size: 24px;
+    font-weight: 500;
+    text-shadow: none;
+}
+
+.navbar .nav > li > a {
+    color: #FDFDFD;
+    font-size: 16px;
+    text-shadow: none;
+}
+
+.navbar .nav > li > a:focus,
+.navbar .nav > li > a:hover {
+    background-color: #5BC0DE;
+    color:  #FDFDFD;
+}
+
 .select-gift {
-    height: 475px;
+    height: 425px;
     background-color: #EEEEEE;
-    border-radius: 6px 6px 6px 6px;
+    border-radius: 6px 6px 0 0;
     font-size: 18px;
     font-weight: 200;
     line-height: 30px;
+    margin-top: 10px;
     padding: 40px;
     text-align: center;
 }
 
 .select-gift img {
-    max-width: 375px;
-    max-height: 350px;
+    max-width: 350px;
+    max-height: 300px;
 }
 
 .select-btn {
-    margin-top: 30px;
+    border-radius: 0 0 6px 6px;
+    font-size: 24px;
+    height: 60px;
+    width: 100%;
 }
 
 #push,
@@ -62,6 +90,6 @@ section {
     margin-top: 10px;
 }
 
-#credit {
+#notice {
     text-align: right;
 }

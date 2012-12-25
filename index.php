@@ -71,16 +71,16 @@
         ?>
     </head>
     <body>
-        <div class="navbar navbar-fixed-top navbar-inverse">
+        <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
                     <a class="brand" href="index.php">RankGifts</a>
                     <ul class="nav">
-                        <li><a href="ranks.php">Top 10</a></li>
+                        <li><a href="ranks.php">Top 10 Gifts</a></li>
                     </ul>
                     <form class="navbar-form pull-right" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                       <input type="text" class="span2" name="add-ASIN" maxlength="10" placeholder="Enter ASIN">
-                      <button type="submit" class="btn">Add</button>
+                      <button type="submit" class="btn">Add Gift</button>
                     </form>
                 </div>
             </div>
@@ -101,7 +101,7 @@
                   echo '<div class="alert alert-success"><button data-dismiss="alert" class="close" type="button">×</button><strong>Success!</strong> Thank you for adding a gift! :)</div>';
                 }
                 ?>
-                <h2>Which gift do you prefer?</h2>
+                <h2>Which gift would you prefer?</h2>
                 <div class="row">
                   <div class="select-gift span5">
                     <?php
@@ -123,12 +123,6 @@
                       }
                     }
                     ?>
-                    <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                      <div class="select-btn">
-                        <input type="hidden" name="update-ASIN" value="<?php echo $gift1['ASIN']; ?>" />
-                        <button type="submit" class="btn btn-primary btn-large">This one!</button>
-                      </div>
-                    </form>
                   </div>
                   <div class="select-gift span5">
                     <?php
@@ -150,11 +144,19 @@
                       }
                     }
                     ?>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="span6">
                     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                      <div class="select-btn">
-                        <input type="hidden" name="update-ASIN" value="<?php echo $gift2['ASIN']; ?>" />
-                        <button type="submit" class="btn btn-primary btn-large">This one!</button>
-                      </div>
+                      <input type="hidden" name="update-ASIN" value="<?php echo $gift1['ASIN']; ?>" />
+                      <button type="submit" class="btn btn-info btn-large select-btn">This one looks good.</button>
+                    </form>
+                  </div>
+                  <div class="span6">
+                    <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                      <input type="hidden" name="update-ASIN" value="<?php echo $gift2['ASIN']; ?>" />
+                      <button type="submit" class="btn btn-info btn-large select-btn">I would rather have this.</button>
                     </form>
                   </div>
                 </div>
@@ -164,11 +166,11 @@
         <div id="footer">
             <div class="container">
                 <div class="row">
-                    <div class="span3">
-                        <p class="muted"><a href="http://dicksontse.com" target="_blank">dicksontse.com</a></p>
+                    <div class="span4">
+                        <p>RankGifts created by <a href="http://dicksontse.com" target="_blank">Dickson Tse</a></p>
                     </div>
-                    <div id="credit" class="span9">
-                        <p>&copy; 2012 Dickson Tse</p>
+                    <div id="notice" class="span8">
+                        <p>Gift titles/images are Amazon affiliate links.</p>
                     </div>
                 </div>
             </div>
