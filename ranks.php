@@ -2,6 +2,9 @@
 <html>
     <head>
         <meta charset='utf-8'>
+        <meta name="description" content="Which gift would you prefer? Rank and add gifts while discovering new gift ideas.">
+        <meta name="keywords" content="rank gift,rank gifts,gifts,gift,gift ideas,top gifts">
+        <meta name="robots" content="index,follow">
         <title>RankGifts | Top 10 Gifts</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/main.css" rel="stylesheet">
