@@ -14,7 +14,7 @@
         }
 
         $link = mysql_connect(DB_SERVER, DB_USER, DB_PW) or die('Could not connect: ' . mysql_error());
-        mysql_select_db('rankgifts') or die('Could not select database');
+        mysql_select_db(DB_NAME) or die('Could not select database');
 
         $query = 'SELECT * FROM products ORDER BY points DESC LIMIT 10';
         $result = mysql_query($query) or die('Query failed: ' . mysql_error());
