@@ -48,7 +48,7 @@
             if ($gifts[$i]['timestamp'])
             {
               $timeDiff = time() - $gifts[$i]['timestamp'];
-              if ($timeDiff >= 3600) // Refresh product data if older than 1 hour
+              if ($timeDiff >= 86400) // Refresh product data if older than 24 hours
               {
                 $refreshGift = true;
               }
