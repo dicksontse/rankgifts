@@ -49,6 +49,102 @@
         {
           $amazonEcs = new AmazonECS(AWS_API_KEY, AWS_API_SECRET_KEY, 'COM', AWS_ASSOCIATE_TAG);
           $amazonEcs->setReturnType(AmazonECS::RETURN_TYPE_ARRAY);
+
+          if ($gift1['timestamp'])
+          {
+            $timeDiff = time() - $gift1['timestamp'];
+            if ($timeDiff < 3600) // Refresh product data if older than 1 hour
+            {
+              $gift1Refreshed = true;
+            }
+            else
+            {
+              $gift1Refreshed = false;
+            }
+          }
+          else
+          {
+            $gift1Refreshed = false;
+          }
+
+          if ($gift1Refreshed)
+          {
+            $item1Title = $gift1['Title'];
+            $item1PageURL = $gift1['PageURL'];
+            $item1ImageURL = $gift1['ImageURL'];
+          }
+          else
+          {
+            $response = $amazonEcs->responseGroup('Small,Images')->lookup($gift1['ASIN']);
+
+            if (isset($response['Items']['Item']) ) {
+              $item1 = $response['Items']['Item'];
+
+              if (isset($item1['ASIN'])) {
+                if (isset($item1['DetailPageURL'])) {
+                  if (isset($item1['ItemAttributes']['Title'])) {
+                    $item1PageURL = $item1['DetailPageURL'];
+                    $item1Title = $item1['ItemAttributes']['Title'];
+                  }
+
+                  if (isset($item1['LargeImage']['URL'] )) {
+                    $item1ImageURL = $item1['LargeImage']['URL'];
+                  }
+                }
+              }
+
+              $query = "UPDATE products SET Title = '" . str_replace("'", "\'", $item1Title) . "', PageURL = '" . str_replace("'", "\'", $item1PageURL) . "', ImageURL = '" . str_replace("'", "\'", $item1ImageURL) . "', timestamp = '" . time() . "' WHERE ASIN = '" . $gift1['ASIN'] . "'";
+              $result = mysql_query($query) or die('Query failed: ' . mysql_error());
+            }
+          }
+
+          if ($gift2['timestamp'])
+          {
+            $timeDiff = time() - $gift2['timestamp'];
+            if ($timeDiff < 3600) // Refresh product data if older than 1 hour
+            {
+              $gift2Refreshed = true;
+            }
+            else
+            {
+              $gift2Refreshed = false;
+            }
+          }
+          else
+          {
+            $gift2Refreshed = false;
+          }
+
+          if ($gift2Refreshed)
+          {
+            $item2Title = $gift2['Title'];
+            $item2PageURL = $gift2['PageURL'];
+            $item2ImageURL = $gift2['ImageURL'];
+          }
+          else
+          {
+            $response = $amazonEcs->responseGroup('Small,Images')->lookup($gift2['ASIN']);
+
+            if (isset($response['Items']['Item']) ) {
+              $item2 = $response['Items']['Item'];
+
+              if (isset($item2['ASIN'])) {
+                if (isset($item2['DetailPageURL'])) {
+                  if (isset($item2['ItemAttributes']['Title'])) {
+                    $item2PageURL = $item2['DetailPageURL'];
+                    $item2Title = $item2['ItemAttributes']['Title'];
+                  }
+
+                  if (isset($item2['LargeImage']['URL'] )) {
+                    $item2ImageURL = $item2['LargeImage']['URL'];
+                  }
+                }
+              }
+
+              $query = "UPDATE products SET Title = '" . str_replace("'", "\'", $item2Title) . "', PageURL = '" . str_replace("'", "\'", $item2PageURL) . "', ImageURL = '" . str_replace("'", "\'", $item2ImageURL) . "', timestamp = '" . time() . "' WHERE ASIN = '" . $gift2['ASIN'] . "'";
+              $result = mysql_query($query) or die('Query failed: ' . mysql_error());
+            }
+          }
         }
         catch(Exception $e)
         {
@@ -118,44 +214,14 @@
                 <div class="row">
                   <div class="select-gift span5">
                     <?php
-                    $response = $amazonEcs->responseGroup('Small,Images')->lookup($gift1['ASIN']);
-
-                    if (isset($response['Items']['Item']) ) {
-                      $item1 = $response['Items']['Item'];
-
-                      if (isset($item1['ASIN'])) {
-                        if (isset($item1['DetailPageURL'])) {
-                          if (isset($item1['ItemAttributes']['Title'])) {
-                            echo "<div class='lead'><a href='" . $item1['DetailPageURL'] . "' target='_blank'>" . truncate_title($item1['ItemAttributes']['Title'], 100) . "</a></div>";
-                          }
-
-                          if (isset($item1['LargeImage']['URL'] )) {
-                            echo "<a href='" . $item1['DetailPageURL'] . "' target='_blank'><img src='" . $item1['LargeImage']['URL'] . "'></a>";
-                          }
-                        }
-                      }
-                    }
+                      echo "<div class='lead'><a href='" . $item1PageURL . "' target='_blank'>" . truncate_title($item1Title, 100) . "</a></div>";
+                      echo "<a href='" . $item1PageURL . "' target='_blank'><img src='" . $item1ImageURL . "'></a>";
                     ?>
                   </div>
                   <div class="select-gift span5">
                     <?php
-                    $response = $amazonEcs->responseGroup('Small,Images')->lookup($gift2['ASIN']);
-
-                    if (isset($response['Items']['Item']) ) {
-                      $item1 = $response['Items']['Item'];
-
-                      if (isset($item1['ASIN'])) {
-                        if (isset($item1['DetailPageURL'])) {
-                          if (isset($item1['ItemAttributes']['Title'])) {
-                            echo "<div class='lead'><a href='" . $item1['DetailPageURL'] . "' target='_blank'>" . truncate_title($item1['ItemAttributes']['Title'], 100) . "</a></div>";
-                          }
-
-                          if (isset($item1['LargeImage']['URL'] )) {
-                            echo "<a href='" . $item1['DetailPageURL'] . "' target='_blank'><img src='" . $item1['LargeImage']['URL'] . "'></a>";
-                          }
-                        }
-                      }
-                    }
+                      echo "<div class='lead'><a href='" . $item2PageURL . "' target='_blank'>" . truncate_title($item2Title, 100) . "</a></div>";
+                      echo "<a href='" . $item2PageURL . "' target='_blank'><img src='" . $item2ImageURL . "'></a>";
                     ?>
                   </div>
                 </div>
