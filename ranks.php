@@ -68,16 +68,16 @@
         ?>
     </head>
     <body>
-        <div class="navbar navbar-fixed-top navbar-inverse">
+        <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
                     <a class="brand" href="index.php">RankGifts</a>
                     <ul class="nav">
-                        <li class="active"><a href="ranks.php">Top 10</a></li>
+                        <li class="active"><a href="ranks.php">Top 10 Gifts</a></li>
                     </ul>
                     <form class="navbar-form pull-right" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                       <input type="text" class="span2" name="add-ASIN" maxlength="10" placeholder="Enter ASIN">
-                      <button type="submit" class="btn">Add</button>
+                      <button type="submit" class="btn">Add Gift</button>
                     </form>
                 </div>
             </div>
@@ -102,9 +102,8 @@
                   <?php
                   for ($i = 0; $i < count($gifts); $i++)
                   {
-                    echo '<div class="row">';
-                    echo '<div class="lead">#' . ($i + 1) . "</div>";
-                    $response = $amazonEcs->responseGroup('Small,Images')->lookup($gifts[$i]['ASIN']);
+                    echo '<div class="row"><div class="ranked-gift span11">';
+                    $response = $amazonEcs->lookup($gifts[$i]['ASIN']);
 
                     if (isset($response['Items']['Item']) ) {
                       $item1 = $response['Items']['Item'];
@@ -112,17 +111,13 @@
                       if (isset($item1['ASIN'])) {
                         if (isset($item1['DetailPageURL'])) {
                           if (isset($item1['ItemAttributes']['Title'])) {
-                            echo "<div class='lead'><a href='" . $item1['DetailPageURL'] . "' target='_blank'>" . $item1['ItemAttributes']['Title'] . "</a></div>";
-                          }
-
-                          if (isset($item1['SmallImage']['URL'] )) {
-                            echo "<a href='" . $item1['DetailPageURL'] . "' target='_blank'><img src='" . $item1['SmallImage']['URL'] . "'></a>";
+                            echo "<div><strong>" . ($i + 1) . ".</strong> <a href='" . $item1['DetailPageURL'] . "' target='_blank'>" . $item1['ItemAttributes']['Title'] . "</a></div>";
                           }
                         }
                       }
                     }
 
-                    echo '</div>';
+                    echo '</div></div>';
                   }
                   ?>
             </div>
@@ -131,11 +126,11 @@
         <div id="footer">
             <div class="container">
                 <div class="row">
-                    <div class="span3">
-                        <p class="muted"><a href="http://dicksontse.com" target="_blank">dicksontse.com</a></p>
+                    <div class="span4">
+                        <p>RankGifts created by <a href="http://dicksontse.com" target="_blank">Dickson Tse</a></p>
                     </div>
-                    <div id="credit" class="span9">
-                        <p>&copy; 2012 Dickson Tse</p>
+                    <div id="notice" class="span8">
+                        <p>Gift titles/images are Amazon affiliate links.</p>
                     </div>
                 </div>
             </div>

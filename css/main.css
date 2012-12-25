@@ -36,6 +36,7 @@ section {
 .navbar-inner {
     background-color: #2F96B4;
     background-image: none;
+    border: none;
 }
 
 .navbar .brand {
@@ -54,6 +55,14 @@ section {
 .navbar .nav > li > a:focus,
 .navbar .nav > li > a:hover {
     background-color: #5BC0DE;
+    color:  #FDFDFD;
+}
+
+.navbar .nav > .active > a, 
+.navbar .nav > .active > a:hover, 
+.navbar .nav > .active > a:focus {
+    background-color: #5BC0DE;
+    box-shadow: none;
     color:  #FDFDFD;
 }
 
@@ -79,6 +88,20 @@ section {
     font-size: 24px;
     height: 60px;
     width: 100%;
+}
+
+.ranked-gift {
+    background-color: #EEEEEE;
+    border-radius: 6px 6px 6px 6px;
+    font-size: 21px;
+    font-weight: 200;
+    line-height: 30px;
+    margin: 10px 20px;
+    padding: 20px 60px 20px 20px;
+}
+
+.ranked-gift img {
+    float: right;
 }
 
 #push,
