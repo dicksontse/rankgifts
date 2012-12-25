@@ -64,7 +64,7 @@
 
             if ($refreshGift)
             {
-              $response = $amazonEcs->lookup($gifts[$i]['ASIN']);
+              $response = $amazonEcs->responseGroup('Small,Images')->lookup($gifts[$i]['ASIN']);
 
               if (isset($response['Items']['Item']) ) {
                 $item1 = $response['Items']['Item'];
@@ -75,10 +75,14 @@
                       $gifts[$i]['Title'] = $item1['ItemAttributes']['Title'];
                       $gifts[$i]['PageURL'] = $item1['DetailPageURL'];
                     }
+
+                    if (isset($item1['LargeImage']['URL'] )) {
+                      $gifts[$i]['ImageURL'] = $item1['LargeImage']['URL'];
+                    }
                   }
                 }
 
-                $query = "UPDATE products SET Title = '" . str_replace("'", "\'", $item1Title) . "', PageURL = '" . str_replace("'", "\'", $item1PageURL) . "', ImageURL = '" . str_replace("'", "\'", $item1ImageURL) . "', timestamp = '" . time() . "' WHERE ASIN = '" . $gifts[$i]['ASIN'] . "'";
+                $query = "UPDATE products SET Title = '" . str_replace("'", "\'", $gifts[$i]['Title']) . "', PageURL = '" . str_replace("'", "\'", $gifts[$i]['PageURL']) . "', ImageURL = '" . str_replace("'", "\'", $gifts[$i]['ImageURL']) . "', timestamp = '" . time() . "' WHERE ASIN = '" . $gifts[$i]['ASIN'] . "'";
                 $result = mysql_query($query) or die('Query failed: ' . mysql_error());
               }
             }
