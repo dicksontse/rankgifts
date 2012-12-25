@@ -33,6 +33,47 @@
         {
           $amazonEcs = new AmazonECS(AWS_API_KEY, AWS_API_SECRET_KEY, 'COM', AWS_ASSOCIATE_TAG);
           $amazonEcs->setReturnType(AmazonECS::RETURN_TYPE_ARRAY);
+
+          for ($i = 0; $i < count($gifts); $i++)
+          {
+            if ($gifts[i]['timestamp'])
+            {
+              $timeDiff = time() - $gifts[i]['timestamp'];
+              if ($timeDiff >= 3600) // Refresh product data if older than 1 hour
+              {
+                $refreshGift = true;
+              }
+            }
+            else
+            {
+              $refreshGift = true;
+            }
+
+            if ($refreshGift)
+            {
+              $response = $amazonEcs->responseGroup('Small,Images')->lookup($gifts[i]['ASIN']);
+
+              if (isset($response['Items']['Item']) ) {
+                $item1 = $response['Items']['Item'];
+
+                if (isset($item1['ASIN'])) {
+                  if (isset($item1['DetailPageURL'])) {
+                    if (isset($item1['ItemAttributes']['Title'])) {
+                      $item1PageURL = $item1['DetailPageURL'];
+                      $item1Title = $item1['ItemAttributes']['Title'];
+                    }
+
+                    if (isset($item1['LargeImage']['URL'] )) {
+                      $item1ImageURL = $item1['LargeImage']['URL'];
+                    }
+                  }
+                }
+
+                $query = "UPDATE products SET Title = '" . str_replace("'", "\'", $item1Title) . "', PageURL = '" . str_replace("'", "\'", $item1PageURL) . "', ImageURL = '" . str_replace("'", "\'", $item1ImageURL) . "', timestamp = '" . time() . "' WHERE ASIN = '" . $gifts[i]['ASIN'] . "'";
+                $result = mysql_query($query) or die('Query failed: ' . mysql_error());
+              }
+            }
+          }
         }
         catch(Exception $e)
         {
@@ -100,25 +141,12 @@
                 ?>
                 <h2>Top 10 Gifts</h2>
                   <?php
-                  for ($i = 0; $i < count($gifts); $i++)
-                  {
-                    echo '<div class="row"><div class="ranked-gift span11">';
-                    $response = $amazonEcs->lookup($gifts[$i]['ASIN']);
-
-                    if (isset($response['Items']['Item']) ) {
-                      $item1 = $response['Items']['Item'];
-
-                      if (isset($item1['ASIN'])) {
-                        if (isset($item1['DetailPageURL'])) {
-                          if (isset($item1['ItemAttributes']['Title'])) {
-                            echo "<div><strong>" . ($i + 1) . ".</strong> <a href='" . $item1['DetailPageURL'] . "' target='_blank'>" . $item1['ItemAttributes']['Title'] . "</a></div>";
-                          }
-                        }
-                      }
+                    for ($i = 0; $i < count($gifts); $i++)
+                    {
+                      echo '<div class="row"><div class="ranked-gift span11">';
+                      echo "<div><strong>" . ($i + 1) . ".</strong> <a href='" . $gifts[$i]['PageURL'] . "' target='_blank'>" . $gifts[$i]['Title'] . "</a></div>";
+                      echo '</div></div>';
                     }
-
-                    echo '</div></div>';
-                  }
                   ?>
             </div>
             <div id="push"></div>
