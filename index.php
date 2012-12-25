@@ -49,6 +49,7 @@
         {
           $amazonEcs = new AmazonECS(AWS_API_KEY, AWS_API_SECRET_KEY, 'COM', AWS_ASSOCIATE_TAG);
           $amazonEcs->setReturnType(AmazonECS::RETURN_TYPE_ARRAY);
+          $amazonEcs->requestDelay(true);
 
           if ($gift1['timestamp'])
           {
