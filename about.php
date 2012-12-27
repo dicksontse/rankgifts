@@ -100,8 +100,8 @@
                 <div class="hero-unit">
                   <h2>Hello!</h2>
                   <p>RankGifts aims to rank and discover the best gifts.</p>
-                  <p>It uses a simple system where you select the gift you prefer out of a random pairing. The more times a specific gift is selected, the higher the rank it will probably be.</p>
-                  <p>Feel free to add more gifts by looking up a product on <a href="http://www.amazon.com/" target="_blank">Amazon.com</a> and then entering the ASIN into the field above.</p>
+                  <p>It uses a simple system where you select the gift you prefer out of a random pairing. The more times a specific gift is selected, the higher the rank it will be.</p>
+                  <p>Feel free to add more gifts by looking up a product on <a href="http://www.amazon.com/" target="_blank">Amazon.com</a> and entering the ASIN into the field above.</p>
                   <pre><strong>Example:</strong> The 10-character ID after "/dp/" is the ASIN.<br>http://www.amazon.com/StarCraft-II-Heart-Collectors-PC-Mac/dp/<strong>B0050SZ1JW</strong>/</pre>
                   <p>Thanks, I greatly appreciate it!</p>
                   <br>
