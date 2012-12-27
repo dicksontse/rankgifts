@@ -5,7 +5,7 @@
         <meta name="description" content="Which gift would you prefer? Rank and add gifts while discovering new gift ideas.">
         <meta name="keywords" content="rank gift,rank gifts,gifts,gift,gift ideas,top gifts">
         <meta name="robots" content="index,follow">
-        <title>RankGifts | Top 10 Gifts</title>
+        <title>RankGifts | About</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/main.css" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
@@ -24,17 +24,6 @@
         $link = mysql_connect(DB_SERVER, DB_USER, DB_PW) or die('Could not connect: ' . mysql_error());
         mysql_select_db(DB_NAME) or die('Could not select database');
 
-        $query = 'SELECT * FROM products ORDER BY points DESC LIMIT 10';
-        $result = mysql_query($query) or die('Query failed: ' . mysql_error());
-
-        $gifts = array();
-        for ($i = 0; $i < 10; $i++)
-        {
-          $gifts[] = mysql_fetch_array($result);
-        }
-
-        mysql_free_result($result);
-
         require 'lib/AmazonECS.class.php';
 
         try
@@ -42,51 +31,6 @@
           $amazonEcs = new AmazonECS(AWS_API_KEY, AWS_API_SECRET_KEY, 'COM', AWS_ASSOCIATE_TAG);
           $amazonEcs->setReturnType(AmazonECS::RETURN_TYPE_ARRAY);
           $amazonEcs->requestDelay(true);
-
-          for ($i = 0; $i < count($gifts); $i++)
-          {
-            if ($gifts[$i]['timestamp'])
-            {
-              $timeDiff = time() - $gifts[$i]['timestamp'];
-              if ($timeDiff >= 86400) // Refresh product data if older than 24 hours
-              {
-                $refreshGift = true;
-              }
-              else
-              {
-                $refreshGift = false;
-              }
-            }
-            else
-            {
-              $refreshGift = true;
-            }
-
-            if ($refreshGift)
-            {
-              $response = $amazonEcs->responseGroup('Small,Images')->lookup($gifts[$i]['ASIN']);
-
-              if (isset($response['Items']['Item']) ) {
-                $item1 = $response['Items']['Item'];
-
-                if (isset($item1['ASIN'])) {
-                  if (isset($item1['DetailPageURL'])) {
-                    if (isset($item1['ItemAttributes']['Title'])) {
-                      $gifts[$i]['Title'] = $item1['ItemAttributes']['Title'];
-                      $gifts[$i]['PageURL'] = $item1['DetailPageURL'];
-                    }
-
-                    if (isset($item1['LargeImage']['URL'] )) {
-                      $gifts[$i]['ImageURL'] = $item1['LargeImage']['URL'];
-                    }
-                  }
-                }
-
-                $query = "UPDATE products SET Title = '" . str_replace("'", "\'", $gifts[$i]['Title']) . "', PageURL = '" . str_replace("'", "\'", $gifts[$i]['PageURL']) . "', ImageURL = '" . str_replace("'", "\'", $gifts[$i]['ImageURL']) . "', timestamp = '" . time() . "' WHERE ASIN = '" . $gifts[$i]['ASIN'] . "'";
-                $result = mysql_query($query) or die('Query failed: ' . mysql_error());
-              }
-            }
-          }
         }
         catch(Exception $e)
         {
@@ -127,8 +71,8 @@
                 <div class="container">
                     <a class="brand" href="index.php">RankGifts</a>
                     <ul class="nav">
-                        <li><a href="about.php">About</a></li>
-                        <li class="active"><a href="ranks.php">Top 10 Gifts</a></li>
+                        <li class="active"><a href="about.php">About</a></li>
+                        <li><a href="ranks.php">Top 10 Gifts</a></li>
                     </ul>
                     <form class="navbar-form pull-right" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                       <input type="text" class="span2" name="add-ASIN" maxlength="10" placeholder="Enter ASIN" rel="popover" title="Finding an ASIN" data-content="Go to a product on Amazon.com and look in the URL: www.amazon.com/dp/ASIN">
@@ -153,15 +97,16 @@
                   echo '<div class="alert alert-success"><button data-dismiss="alert" class="close" type="button">×</button><strong>Success!</strong> Thank you for adding a gift! :)</div>';
                 }
                 ?>
-                <h2>Top 10 Gifts</h2>
-                  <?php
-                    for ($i = 0; $i < count($gifts); $i++)
-                    {
-                      echo '<div class="row"><div class="ranked-gift span11">';
-                      echo "<div><strong>" . ($i + 1) . ".</strong> <a href='" . $gifts[$i]['PageURL'] . "' target='_blank'>" . $gifts[$i]['Title'] . "</a></div>";
-                      echo '</div></div>';
-                    }
-                  ?>
+                <div class="hero-unit">
+                  <h2>Hello!</h2>
+                  <p>RankGifts aims to rank and discover the best gifts.</p>
+                  <p>It uses a simple system where you select the gift you prefer out of a random pairing. The more times a specific gift is selected, the higher the rank it will probably be.</p>
+                  <p>Feel free to add more gifts by looking up a product on <a href="http://www.amazon.com/" target="_blank">Amazon.com</a> and then entering the ASIN into the field above.</p>
+                  <pre><strong>Example:</strong> The 10-character ID after "/dp/" is the ASIN.<br>http://www.amazon.com/StarCraft-II-Heart-Collectors-PC-Mac/dp/<strong>B0050SZ1JW</strong>/</pre>
+                  <p>Thanks, I greatly appreciate it!</p>
+                  <br>
+                  <p>If you have any feedback or concerns, please email me at <a href="mailto:reltair@gmail.com">reltair@gmail.com</a>.</p>
+                </div>
             </div>
             <div id="push"></div>
         </div>

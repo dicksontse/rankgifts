@@ -189,6 +189,7 @@
                 <div class="container">
                     <a class="brand" href="index.php">RankGifts</a>
                     <ul class="nav">
+                        <li><a href="about.php">About</a></li>
                         <li><a href="ranks.php">Top 10 Gifts</a></li>
                     </ul>
                     <form class="navbar-form pull-right" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
