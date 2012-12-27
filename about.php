@@ -105,7 +105,7 @@
                   <pre><strong>Example:</strong> The 10-character ID after "/dp/" is the ASIN.<br>http://www.amazon.com/StarCraft-II-Heart-Collectors-PC-Mac/dp/<strong>B0050SZ1JW</strong>/</pre>
                   <p>Thanks, I greatly appreciate it!</p>
                   <br>
-                  <p>If you have any feedback or concerns, please email me at <a href="mailto:reltair@gmail.com">reltair@gmail.com</a>.</p>
+                  <p>If you have any feedback or concerns, please email me at <a href="mailto:hello@dicksontse.com">hello@dicksontse.com</a>.</p>
                 </div>
             </div>
             <div id="push"></div>
