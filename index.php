@@ -5,7 +5,7 @@
         <meta name="description" content="Which gift would you prefer? Rank and add gifts while discovering new gift ideas.">
         <meta name="keywords" content="rank gift,rank gifts,gifts,gift,gift ideas,top gifts">
         <meta name="robots" content="index,follow">
-        <title>RankGifts | Discover new gifts ideas</title>
+        <title>RankGifts | Discover new gifts</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/main.css" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
